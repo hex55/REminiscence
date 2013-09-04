@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=REminiscence
+Comment=flashback engine
+Exec=REminiscence.dge
+Icon=icon
+Categories=games;
+X-OD-Manual=readme.txt
