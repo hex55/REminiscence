@@ -1,23 +1,24 @@
-+----------------------------------------------------------------------------------------------+
-|                                                                                              |
-|                              REminiscence port for GCW0:                                     |
-|                                                                                              |
-+----------------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|                              REminiscence port for GCW0:                                |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
 
 About:
 ------
 
-This port is my first trial at OpenSource development, SDL programing and generally speaking Linux.
-While rather an impressive game all the credit should go to cyx(Gregory Montoir) for his great
-work on REminiscence, because this "port" is merely just a simple recompile with a few settings altered.
+This port is my first trial at OpenSource development, SDL programing and generally
+speaking Linux. While rather an impressive game all the credit should go to cyx
+(Gregory Montoir) for his great work on REminiscence, because this "port" is merely
+just a simple recompile with a few settings altered.
 
 The SourceCode is avaible in "https://github.com/ElwingGit/GCW0_REminiscence.git".
 
 Usage:
 ------
 
-The OPK packaged version by default will create a folder for the data and the savefile if it
-did not exist before. Thus you can either:
+The OPK packaged version by default will create a folder for the data and the savefile
+if it did not exist before. Thus you can either:
 - copy the opk on the GCW0
 - run the opk once.
 - copy the datafile in "/usr/local/home/.REminiscence/data"
@@ -31,11 +32,12 @@ Credits:
 --------
 Gregory Montoir of course and all the people who helped him with the original REminiscence
 
-+----------------------------------------------------------------------------------------------+
-|                                                                                              |
-|                             Original REminiscence ReadMe:                                    |
-|                                                                                              |
-+----------------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|                             Original REminiscence ReadMe:                               |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
 
 
 REminiscence README
