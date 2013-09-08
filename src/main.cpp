@@ -76,9 +76,11 @@ static Language detectLanguage(FileSystem *fs) {
 	for (int i = 0; table[i].filename; ++i) {
 		File f;
 		if (f.open(table[i].filename, "rb", fs)) {
+            debug(DBG_INFO, "Language detected: %d (%s)",table[i].language,table[i].filename);
 			return table[i].language;
 		}
 	}
+    debug(DBG_INFO, "Failed to detect language, using English");
 	return LANG_EN;
 }
 
@@ -126,7 +128,8 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 	Language language = detectLanguage(&fs);
-	SystemStub *stub = SystemStub_SDL_create();
+
+    SystemStub *stub = SystemStub_SDL_create();
 	Game *g = new Game(stub, &fs, savePath, atoi(levelNum), (ResourceType)version, language);
 	g->run();
 	delete g;

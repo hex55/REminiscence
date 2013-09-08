@@ -100,9 +100,20 @@ void Menu::loadPicture(const char *prefix) {
 void Menu::handleInfoScreen() {
 	debug(DBG_MENU, "Menu::handleInfoScreen()");
 	_vid->fadeOut();
+	//todo: replace me with a GCW0 specific mapping image
 	switch (_res->_lang) {
 	case LANG_FR:
+#ifdef NEW_GCW0_MAPPING
+		//loadPicture("infogcw0");
+        //static const uint8 _instr_f_map[];
+        //static const uint8 _instr_f_pal[];
+        for(int i = 0; i < 57344; ++i){
+            _vid->_frontLayer[i] = _instr_f_map[i];
+        }
+        _stub->setPalette(_instr_f_pal, 256);
+#else
 		loadPicture("instru_f");
+#endif
 		break;
 	case LANG_EN:
 	case LANG_DE:

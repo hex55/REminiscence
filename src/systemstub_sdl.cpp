@@ -369,6 +369,36 @@ while (true) {
 			}
 			break;
 		case SDL_KEYUP:
+#ifdef NEW_GCW0_MAPPING
+			switch (ev.key.keysym.sym) {
+			case SDLK_LEFT:
+				_pi.dirMask &= ~PlayerInput::DIR_LEFT;
+				break;
+			case SDLK_RIGHT:
+				_pi.dirMask &= ~PlayerInput::DIR_RIGHT;
+				break;
+			case SDLK_UP:
+				_pi.dirMask &= ~PlayerInput::DIR_UP;
+				break;
+			case SDLK_DOWN:
+				_pi.dirMask &= ~PlayerInput::DIR_DOWN;
+				break;
+			case SDLK_LSHIFT: //take out weapon
+				_pi.space = false;
+				break;
+			case SDLK_LALT: //action/run/take
+				_pi.shift = false;
+				break;
+			case SDLK_LCTRL: //use object
+				_pi.enter = false;
+				break;
+			case SDLK_RETURN: //options
+				_pi.escape = false;
+				break;
+			default:
+				break;
+			}
+#else //!NEW_GCW0_MAPPING
 			switch (ev.key.keysym.sym) {
 			case SDLK_LEFT:
 				_pi.dirMask &= ~PlayerInput::DIR_LEFT;
@@ -398,8 +428,43 @@ while (true) {
 			default:
 				break;
 			}
+#endif //NEW_GCW0_MAPPING
 			break;
 		case SDL_KEYDOWN:
+#ifdef NEW_GCW0_MAPPING
+			_pi.lastChar = ev.key.keysym.sym;
+			switch (ev.key.keysym.sym) {
+			case SDLK_LEFT:
+				_pi.dirMask |= PlayerInput::DIR_LEFT;
+				break;
+			case SDLK_RIGHT:
+				_pi.dirMask |= PlayerInput::DIR_RIGHT;
+				break;
+			case SDLK_UP:
+				_pi.dirMask |= PlayerInput::DIR_UP;
+				break;
+			case SDLK_DOWN:
+				_pi.dirMask |= PlayerInput::DIR_DOWN;
+				break;
+			case SDLK_SPACE: //inventory/end movies
+				_pi.backspace = true;
+				break;
+			case SDLK_LSHIFT: //take weapon out
+				_pi.space = true;
+				break;
+			case SDLK_LALT: //action/run/take
+				_pi.shift = true;
+				break;
+			case SDLK_LCTRL: //use object
+				_pi.enter = true;
+				break;
+			case SDLK_RETURN: //options
+				_pi.escape = true;
+				break;
+			default:
+				break;
+			}
+#else //!NEW_GCW0_MAPPING
 			if (ev.key.keysym.mod & KMOD_ALT) {
 				if (ev.key.keysym.sym == SDLK_RETURN) {
 					switchGfxMode(!_fullscreen, _currentScaler);
@@ -473,6 +538,7 @@ while (true) {
 			default:
 				break;
 			}
+#endif //NEW_GCW0_MAPPING
 			break;
 		default:
 			break;

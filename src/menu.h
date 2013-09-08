@@ -41,6 +41,12 @@ struct Menu {
 
 	static const char *_passwords[8][3];
 
+#ifdef NEW_GCW0_MAPPING
+	static const uint8 _instr_f_map[];
+	static const uint8 _instr_f_pal[];
+	//static const uint8 _instr_e[];
+#endif
+
 	ModPlayer *_ply;
 	Resource *_res;
 	SystemStub *_stub;

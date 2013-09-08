@@ -1,8 +1,8 @@
-+-----------------------------------------------------------------------------------------+
-|                                                                                         |
-|                              REminiscence port for GCW0:                                |
-|                                                                                         |
-+-----------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------------+
+|                                                                                       |
+|                             REminiscence port for GCW0:                               |
+|                                                                                       |
++---------------------------------------------------------------------------------------+
 
 About:
 ------
@@ -28,16 +28,26 @@ or:
 - create the folder and copy the datafile in "/usr/local/home/.REminiscence/data"
 - start the opk again and enjoy the game.
 
+Key Mapping:
+------------
+This port use a new key mapping, here are the new in-game key:
+    Arrow Keys      move Conrad
+    A               use the current inventory object
+    B               talk / use / run / shoot
+    X               take weapon out
+    Y               display the inventory
+    Start           display the options
+
 Credits:
 --------
 Gregory Montoir of course and all the people who helped him with the original REminiscence
 
 
-+-----------------------------------------------------------------------------------------+
-|                                                                                         |
-|                             Original REminiscence ReadMe:                               |
-|                                                                                         |
-+-----------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------------+
+|                                                                                       |
+|                            Original REminiscence ReadMe:                              |
+|                                                                                       |
++---------------------------------------------------------------------------------------+
 
 
 REminiscence README

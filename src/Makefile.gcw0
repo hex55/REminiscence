@@ -6,14 +6,13 @@ PREFIX ?= /opt/gcw0-toolchain/usr
 SDL_CFLAGS = `sdl-config --prefix=$(PREFIX) --cflags`
 SDL_LIBS = `sdl-config --prefix=$(PREFIX) --libs`
 
-DEFINES = -DBYPASS_PROTECTION -DENABLE_PASSWORD_MENU -DUSE_ZLIB
+DEFINES = -DBYPASS_PROTECTION -DENABLE_PASSWORD_MENU -DUSE_ZLIB -DNEW_GCW0_MAPPING
 #DEFINES = -DBYPASS_PROTECTION -DENABLE_PASSWORD_MENU -DNDEBUG
 
 #options
 TOOLCHAIN = /opt/gcw0-toolchain/usr
 CC  = /opt/gcw0-toolchain/usr/bin/mipsel-linux-gcc
 CPP = /opt/gcw0-toolchain/usr/bin/mipsel-linux-g++
-#LD  := /opt/gcw0-toolchain/usr/bin/mipsel-linux-g++
 LD  = /opt/gcw0-toolchain/usr/bin/mipsel-linux-g++
 
 SDL_LIB     = $(TOOLCHAIN)/lib
@@ -28,7 +27,6 @@ CC_OPTS		= -O2 -mips32 -mhard-float -G0 -DNOUNCRYPT $(F_OPTS) $(DEFINES)
 
 CFLAGS		= -I$(SDL_INCLUDE) -D_OPENDINGUX_ -DZ80 -DTARGET_OD -D_MAX_PATH=2048 -DHOST_FPS=60 $(CC_OPTS)
 CXXFLAGS	= $(CFLAGS)
-#-DUSE_ZLIB
 LDFLAGS		= -L$(SDL_LIB) $(CC_OPTS) -lSDL -lz
 
 #!options
