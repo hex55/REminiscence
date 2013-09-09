@@ -63,6 +63,11 @@ void Menu::drawString(const char *str, int16 y, int16 x, uint8 color) {
 		_vid->_charTransparentColor = 0xFF;
 		_vid->_charShadowColor = _charVar5;
 		break;
+	case 6:
+		_vid->_charFrontColor = 0x08;
+		_vid->_charTransparentColor = 0xFF;
+		_vid->_charShadowColor = _charVar2;
+		break;
 	}
 
 	drawString2(str, y, x);
@@ -108,7 +113,7 @@ void Menu::handleInfoScreen() {
             _vid->_frontLayer[i] = _instr_f_map[i];
         }
         _stub->setPalette(_instr_f_pal, 256);
-        drawString(Game::_version, 26, 1, 2);
+        drawString(Game::_version, 26, 1, 6);
 #else
 		loadPicture("instru_f");
 #endif
@@ -117,16 +122,11 @@ void Menu::handleInfoScreen() {
 	case LANG_DE:
 	case LANG_SP:
 #ifdef NEW_GCW0_MAPPING
-        //todo: add my res
-        /*for(int i = 0; i < 57344; ++i){
+        for(int i = 0; i < 57344; ++i){
             _vid->_frontLayer[i] = _instr_e_map[i];
         }
-        _stub->setPalette(_instr_e_pal, 256);*/
-        for(int i = 0; i < 57344; ++i){
-            _vid->_frontLayer[i] = _instr_f_map[i];
-        }
-        _stub->setPalette(_instr_f_pal, 256);
-        drawString(Game::_version, 26, 1, 2);
+        _stub->setPalette(_instr_e_pal, 256);
+        drawString(Game::_version, 26, 1, 6);
 #else
 		loadPicture("instru_e");
 #endif
