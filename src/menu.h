@@ -44,7 +44,8 @@ struct Menu {
 #ifdef NEW_GCW0_MAPPING
 	static const uint8 _instr_f_map[];
 	static const uint8 _instr_f_pal[];
-	//static const uint8 _instr_e[];
+	static const uint8 _instr_e_map[];
+	static const uint8 _instr_e_pal[];
 #endif
 
 	ModPlayer *_ply;

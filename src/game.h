@@ -18,6 +18,10 @@
 #ifndef GAME_H__
 #define GAME_H__
 
+#ifdef GCW0
+#define NEW_GCW0_MAPPING
+#endif
+
 #include "intern.h"
 #include "cutscene.h"
 #include "fs.h"
@@ -382,6 +386,9 @@ struct Game {
 	bool loadGameState(uint8 slot);
 	void saveState(File *f);
 	void loadState(File *f);
+#ifdef GCW0
+    static const char *_version;
+#endif
 };
 
 #endif // GAME_H__

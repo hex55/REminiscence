@@ -16,6 +16,7 @@
  */
 
 #include <SDL/SDL.h>
+#include "game.h"
 #include "scaler.h"
 #include "systemstub.h"
 

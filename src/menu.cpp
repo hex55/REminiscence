@@ -104,13 +104,11 @@ void Menu::handleInfoScreen() {
 	switch (_res->_lang) {
 	case LANG_FR:
 #ifdef NEW_GCW0_MAPPING
-		//loadPicture("infogcw0");
-        //static const uint8 _instr_f_map[];
-        //static const uint8 _instr_f_pal[];
         for(int i = 0; i < 57344; ++i){
             _vid->_frontLayer[i] = _instr_f_map[i];
         }
         _stub->setPalette(_instr_f_pal, 256);
+        drawString(Game::_version, 26, 1, 2);
 #else
 		loadPicture("instru_f");
 #endif
@@ -118,7 +116,20 @@ void Menu::handleInfoScreen() {
 	case LANG_EN:
 	case LANG_DE:
 	case LANG_SP:
+#ifdef NEW_GCW0_MAPPING
+        //todo: add my res
+        /*for(int i = 0; i < 57344; ++i){
+            _vid->_frontLayer[i] = _instr_e_map[i];
+        }
+        _stub->setPalette(_instr_e_pal, 256);*/
+        for(int i = 0; i < 57344; ++i){
+            _vid->_frontLayer[i] = _instr_f_map[i];
+        }
+        _stub->setPalette(_instr_f_pal, 256);
+        drawString(Game::_version, 26, 1, 2);
+#else
 		loadPicture("instru_e");
+#endif
 		break;
 	}
 	_vid->fullRefresh();

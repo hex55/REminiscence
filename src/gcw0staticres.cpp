@@ -1,5 +1,5 @@
-/* REminiscence - Flashback interpreter
- * Copyright (C) 2005-2011 Gregory Montoir
+/* REminiscence - Flashback interpreter, GCW0 port
+ * Copyright (C) 2013 Pierre Jost
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 #include "game.h"
 #include "resource.h"
 
+#ifdef GCW0
+const char* Game::_version = "v0.1";
 
 #ifdef NEW_GCW0_MAPPING
 const uint8 Menu::_instr_f_map[] = {
@@ -3657,5 +3659,8 @@ const uint8 Menu::_instr_f_pal[] = {
     0x0A, 0x24, 0x1B, 0x00, 0x22, 0x17, 0x07, 0x20, 0x18, 0x00, 0x1E, 0x16, 0x09, 0x1E, 0x15, 0x00,
     0x1A, 0x11, 0x00, 0x15, 0x0D, 0x00, 0x11, 0x09, 0x00, 0x0C, 0x06, 0x00, 0x08, 0x03, 0x00, 0x03
 };
-	//static const uint8 _instr_e[];
+
+//const uint8 Menu::_instr_e_map[];
+//const uint8 Menu::_instr_e_pal[];
+#endif
 #endif

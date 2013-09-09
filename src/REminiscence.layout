@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="all" />
-	<File name="collision.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="1802" topLine="31" />
+	<File name="collision.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="750" topLine="0" />
 	</File>
 	<File name="cutscene.cpp" open="0" top="0" tabpos="7">
-		<Cursor position="7988" topLine="285" />
+		<Cursor position="26426" topLine="866" />
 	</File>
 	<File name="fs.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="822" topLine="9" />
@@ -13,11 +13,17 @@
 	<File name="fs.h" open="0" top="0" tabpos="0">
 		<Cursor position="890" topLine="0" />
 	</File>
-	<File name="game.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="7502" topLine="291" />
+	<File name="game.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="9122" topLine="354" />
 	</File>
-	<File name="game.h" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="342" />
+	<File name="game.h" open="1" top="0" tabpos="7">
+		<Cursor position="808" topLine="0" />
+	</File>
+	<File name="gcw0staticres.cpp" open="1" top="0" tabpos="12">
+		<Cursor position="364219" topLine="3620" />
+	</File>
+	<File name="graphics.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="672" />
 	</File>
 	<File name="intern.h" open="0" top="0" tabpos="6">
 		<Cursor position="775" topLine="147" />
@@ -28,40 +34,55 @@
 	<File name="locale.h" open="0" top="0" tabpos="3">
 		<Cursor position="1452" topLine="23" />
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="3340" topLine="0" />
+	<File name="main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="3041" topLine="84" />
 	</File>
-	<File name="menu.h" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="23" />
+	<File name="menu.cpp" open="1" top="1" tabpos="5">
+		<Cursor position="2158" topLine="68" />
+	</File>
+	<File name="menu.h" open="1" top="0" tabpos="6">
+		<Cursor position="791" topLine="0" />
 	</File>
 	<File name="mixer.cpp" open="0" top="0" tabpos="12">
 		<Cursor position="2453" topLine="72" />
 	</File>
+	<File name="mod_player.cpp" open="1" top="0" tabpos="10">
+		<Cursor position="12032" topLine="413" />
+	</File>
 	<File name="mod_player.h" open="0" top="0" tabpos="0">
 		<Cursor position="782" topLine="0" />
+	</File>
+	<File name="piege.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="14860" topLine="507" />
 	</File>
 	<File name="resource.cpp" open="0" top="0" tabpos="8">
 		<Cursor position="860" topLine="0" />
 	</File>
-	<File name="resource.h" open="0" top="0" tabpos="5">
-		<Cursor position="4456" topLine="4" />
+	<File name="resource.h" open="1" top="0" tabpos="8">
+		<Cursor position="4456" topLine="159" />
+	</File>
+	<File name="seq_player.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="6006" topLine="241" />
 	</File>
 	<File name="seq_player.h" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="47" />
 	</File>
-	<File name="staticres.cpp" open="0" top="0" tabpos="9">
-		<Cursor position="97290" topLine="1177" />
+	<File name="staticres.cpp" open="1" top="0" tabpos="11">
+		<Cursor position="291292" topLine="3602" />
 	</File>
 	<File name="sys.h" open="0" top="0" tabpos="0">
-		<Cursor position="768" topLine="9" />
+		<Cursor position="768" topLine="0" />
 	</File>
-	<File name="systemstub.h" open="0" top="0" tabpos="0">
-		<Cursor position="877" topLine="55" />
+	<File name="systemstub.h" open="1" top="0" tabpos="9">
+		<Cursor position="877" topLine="0" />
 	</File>
-	<File name="systemstub_sdl.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="10985" topLine="367" />
+	<File name="systemstub_sdl.cpp" open="1" top="0" tabpos="13">
+		<Cursor position="775" topLine="2" />
 	</File>
-	<File name="util.cpp" open="1" top="0" tabpos="3">
+	<File name="util.cpp" open="0" top="0" tabpos="3">
 		<Cursor position="807" topLine="9" />
+	</File>
+	<File name="video.h" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="45" />
 	</File>
 </CodeBlocks_layout_file>
