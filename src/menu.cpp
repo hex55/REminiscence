@@ -23,9 +23,15 @@
 #include "menu.h"
 
 
+#ifdef GCW0
+Menu::Menu(ModPlayer *ply, Resource *res, SystemStub *stub, Video *vid,Config *config)
+	: _ply(ply), _res(res), _stub(stub), _vid(vid), _config(config) {
+}
+#else
 Menu::Menu(ModPlayer *ply, Resource *res, SystemStub *stub, Video *vid)
 	: _ply(ply), _res(res), _stub(stub), _vid(vid) {
 }
+#endif
 
 void Menu::drawString(const char *str, int16 y, int16 x, uint8 color) {
 	debug(DBG_MENU, "Menu::drawString()");
@@ -253,6 +259,16 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 	_vid->fullRefresh();
 	uint8 currentSkill = new_skill;
 	uint8 currentLevel = new_level;
+#ifdef GCW0
+    uint8 maxLevelEasy = _config->GetLevelAllowed(SKILL_EASY);
+    uint8 maxLevelNormal = _config->GetLevelAllowed(SKILL_NORMAL);
+    uint8 maxLevelHard = _config->GetLevelAllowed(SKILL_HARD);
+    uint8 maxLevel = maxLevelEasy;
+    if(maxLevelNormal>maxLevel)
+        maxLevel = maxLevelNormal;
+    if(maxLevelHard>maxLevel)
+        maxLevel = maxLevelHard;
+#endif
 	do {
 		static const char *levelTitles[] = {
 			"Titan / The Jungle",
@@ -263,20 +279,147 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 			"Planet Morphs / Surface",
 			"Planet Morphs / Inner Core"
 		};
+#ifdef GCW0
+		for (int i = 0; i < 7; ++i) {
+			drawString(levelTitles[i], 7 + i * 2, 4, (i>maxLevel)?6:((currentLevel == i) ? 2 : 3));
+		}
+		_vid->markBlockAsDirty(4 * 8, 7 * 8, 192, 7 * 8);
+
+        drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentLevel>maxLevelEasy)?6:((currentSkill == 0) ? 2 : 3));
+        drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentLevel>maxLevelNormal)?6:((currentSkill == 1) ? 2 : 3));
+        drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentLevel>maxLevelHard)?6:((currentSkill == 2) ? 2 : 3));
+#else
 		for (int i = 0; i < 7; ++i) {
 			drawString(levelTitles[i], 7 + i * 2, 4, (currentLevel == i) ? 2 : 3);
 		}
 		_vid->markBlockAsDirty(4 * 8, 7 * 8, 192, 7 * 8);
 
-                drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentSkill == 0) ? 2 : 3);
-                drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentSkill == 1) ? 2 : 3);
-                drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentSkill == 2) ? 2 : 3);
+        drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentSkill == 0) ? 2 : 3);
+        drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentSkill == 1) ? 2 : 3);
+        drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentSkill == 2) ? 2 : 3);
+#endif
 		_vid->markBlockAsDirty(4 * 8, 23 * 8, 192, 8);
 
 		_vid->updateScreen();
 		_stub->sleep(EVENTS_DELAY);
 		_stub->processEvents();
 
+#ifdef GCW0
+        bool needSkillFixup = false;
+		if (_stub->_pi.dirMask & PlayerInput::DIR_UP) {
+			_stub->_pi.dirMask &= ~PlayerInput::DIR_UP;
+			if (currentLevel != 0) {
+				--currentLevel;
+			} else {
+				currentLevel = maxLevel;
+				needSkillFixup = true;
+			}
+		}
+		if (_stub->_pi.dirMask & PlayerInput::DIR_DOWN) {
+			_stub->_pi.dirMask &= ~PlayerInput::DIR_DOWN;
+			if (currentLevel != maxLevel) {
+				++currentLevel;
+				needSkillFixup = true;
+			} else {
+				currentLevel = 0;
+			}
+		}
+		if(needSkillFixup){
+			switch(currentSkill){
+            case 0:
+                if(currentLevel>maxLevelEasy){
+                    if(currentLevel>maxLevelNormal){
+                        if(currentLevel>maxLevelHard){
+                            currentLevel=0;
+                        }else{
+                            currentSkill = 2;
+                        }
+                    }else{
+                        currentSkill = 1;
+                    }
+                }
+                break;
+            case 1:
+                if(currentLevel>maxLevelNormal){
+                    if(currentLevel>maxLevelEasy){
+                        if(currentLevel>maxLevelHard){
+                            currentLevel=0;
+                        }else{
+                            currentSkill = 2;
+                        }
+                    }else{
+                        currentSkill = 0;
+                    }
+                }
+                break;
+            case 2:
+                if(currentLevel>maxLevelHard){
+                    if(currentLevel>maxLevelEasy){
+                        if(currentLevel>maxLevelNormal){
+                            currentLevel=0;
+                        }else{
+                            currentSkill = 1;
+                        }
+                    }else{
+                        currentSkill = 0;
+                    }
+                }
+                break;
+			}
+		}
+		if (_stub->_pi.dirMask & PlayerInput::DIR_LEFT) {
+			_stub->_pi.dirMask &= ~PlayerInput::DIR_LEFT;
+			switch(currentSkill){
+            case 0:
+                if(currentLevel <= maxLevelHard){
+                    currentSkill = 2;
+                }else if(currentLevel <= maxLevelNormal){
+                    currentSkill = 1;
+                }
+			    break;
+            case 1:
+                if(currentLevel <= maxLevelEasy){
+                    currentSkill = 0;
+                }else if(currentLevel <= maxLevelHard){
+                    currentSkill = 2;
+                }
+			    break;
+            case 2:
+                if(currentLevel <= maxLevelNormal){
+                    currentSkill = 1;
+                }else if(currentLevel <= maxLevelEasy){
+                    currentSkill = 0;
+                }
+			    break;
+			}
+		}
+		if (_stub->_pi.dirMask & PlayerInput::DIR_RIGHT) {
+			_stub->_pi.dirMask &= ~PlayerInput::DIR_RIGHT;
+			switch(currentSkill){
+			case 0:
+    			if(currentLevel <= maxLevelNormal){
+        			currentSkill = 1;
+                }else if(currentLevel <= maxLevelHard){
+                    currentSkill = 2;
+                }
+			    break;
+            case 1:
+                if(currentLevel <= maxLevelHard){
+                    currentSkill = 2;
+                }else if(currentLevel <= maxLevelEasy){
+                    currentSkill = 0;
+                }
+			    break;
+            case 2:
+                if(currentLevel <= maxLevelEasy){
+                    currentSkill = 0;
+                }else if(currentLevel <= maxLevelNormal){
+                    currentSkill = 1;
+                }
+			    break;
+			}
+		}
+#else
 		if (_stub->_pi.dirMask & PlayerInput::DIR_UP) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_UP;
 			if (currentLevel != 0) {
@@ -309,11 +452,17 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 				currentSkill = 0;
 			}
 		}
+#endif
 		if (_stub->_pi.enter) {
 			_stub->_pi.enter = false;
 			new_skill = currentSkill;
 			new_level = currentLevel;
 			return true;
+		}
+
+		if (_stub->_pi.backspace) {
+			_stub->_pi.backspace = false;
+			return false;
 		}
 	} while (!_stub->_pi.quit);
 	return false;

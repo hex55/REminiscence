@@ -20,6 +20,7 @@
 
 #ifdef GCW0
 #define NEW_GCW0_MAPPING
+#include "config.h"
 #endif
 
 #include "intern.h"
@@ -78,6 +79,10 @@ struct Game {
 	SystemStub *_stub;
 	FileSystem *_fs;
 	const char *_savePath;
+
+#ifdef GCW0
+    Config _config;
+#endif
 
 	const uint8 *_stringsTable;
 	const char **_textsTable;

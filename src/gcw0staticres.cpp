@@ -19,7 +19,7 @@
 #include "resource.h"
 
 #ifdef GCW0
-const char* Game::_version = "v0.1.1";
+const char* Game::_version = "v0.2.1";
 
 #ifdef NEW_GCW0_MAPPING
 const uint8 Menu::_instr_f_map[] = {

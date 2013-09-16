@@ -40,6 +40,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Makefile.gcw0" />
 		<Unit filename="collision.cpp" />
 		<Unit filename="cutscene.cpp" />
 		<Unit filename="cutscene.h" />

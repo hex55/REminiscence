@@ -117,6 +117,10 @@ void Cutscene::drawText(int16 x, int16 y, const uint8 *p, uint16 color, uint8 *p
 			last_sep = 30;
 		}
 	}
+	/*char text[128];
+	memcpy(&text,p,last_sep);
+    debug(DBG_INFO, "<Cutscene::drawText> string addr: %d, value %s",p,text);*/
+
 	const uint8 *sep = _textSep;
 	y += 50;
 	x += 8;

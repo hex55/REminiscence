@@ -188,7 +188,9 @@ struct Resource {
 	const uint8 *getCineString(int num) {
 		if (_cine_off) {
 			const int offset = READ_BE_UINT16(_cine_off + num * 2);
-			return _cine_txt + offset;
+			//I dunnot understand the reason for this +num... it looks like offset are counted 1 to short for what's loaded
+			// in memory... but using a hex editor they seems to match...
+            return _cine_txt + offset+num;
 		}
 		return 0;
 	}
