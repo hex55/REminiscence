@@ -20,7 +20,7 @@
 
 Locale::Locale(Language ver)
 	: _ver(ver) {
-	switch (_ver) {
+    switch (_ver) {
 	case LANG_FR:
 		_stringsTable = _stringsTableFR;
 		_textsTable = _textsTableFR;

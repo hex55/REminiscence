@@ -2,32 +2,28 @@
 APP_NAME = REminiscence
 EXESUFFIX = .dge
 
-PREFIX ?= /opt/gcw0-toolchain/usr
-SDL_CFLAGS = `sdl-config --prefix=$(PREFIX) --cflags`
-SDL_LIBS = `sdl-config --prefix=$(PREFIX) --libs`
-
-DEFINES = -DBYPASS_PROTECTION -DENABLE_PASSWORD_MENU -DUSE_ZLIB -DGCW0
-#DEFINES = -DBYPASS_PROTECTION -DENABLE_PASSWORD_MENU -DNDEBUG
+DEFINES = -DBYPASS_PROTECTION -DUSE_ZLIB -DGCW0
+#DEFINES = -DENABLE_PASSWORD_MENU
 
 #options
-TOOLCHAIN = /opt/gcw0-toolchain/usr
 CC  = /opt/gcw0-toolchain/usr/bin/mipsel-linux-gcc
 CPP = /opt/gcw0-toolchain/usr/bin/mipsel-linux-g++
 LD  = /opt/gcw0-toolchain/usr/bin/mipsel-linux-g++
 
-SDL_LIB     = $(TOOLCHAIN)/lib
-SDL_INCLUDE = $(TOOLCHAIN)/include
+SDL_CONFIG := /opt/gcw0-toolchain/usr/mipsel-gcw0-linux-uclibc/sysroot/usr/bin/sdl-config
+SDL_CFLAGS := $(shell $(SDL_CONFIG) --cflags)
+SDL_LDLIBS := $(shell $(SDL_CONFIG) --libs)
 
 F_OPTS = -falign-functions -falign-loops -falign-labels -falign-jumps \
 	-ffast-math -fsingle-precision-constant -funsafe-math-optimizations \
 	-fomit-frame-pointer -fno-builtin -fno-common \
 	-fstrict-aliasing  -fexpensive-optimizations \
 	-finline -finline-functions -fpeel-loops -fno-exceptions -fno-rtti -fpermissive
-CC_OPTS		= -O2 -mips32 -mhard-float -G0 -DNOUNCRYPT $(F_OPTS) $(DEFINES)
+CC_OPTS		= -O2 -mips32 -mhard-float -G0 $(DEFINES) $(F_OPTS)
 
-CFLAGS		= -I$(SDL_INCLUDE) -D_OPENDINGUX_ -DZ80 -DTARGET_OD -D_MAX_PATH=2048 -DHOST_FPS=60 $(CC_OPTS)
+CFLAGS		= -I$(SDL_CFLAGS) $(CC_OPTS)
 CXXFLAGS	= $(CFLAGS)
-LDFLAGS		= -L$(SDL_LIB) $(CC_OPTS) -lSDL -lz
+LDFLAGS		= -L$(SDL_LDLIBS) $(CC_OPTS) -lSDL -lz
 
 #!options
 
@@ -44,8 +40,6 @@ DEPS = $(SRCS:.cpp=.d)
 
 LIBS = $(SDL_LIBS) -lz
 
--include Makefile.local
-
 .PHONY : all
 
 all : $(APP_NAME)$(EXESUFFIX)
@@ -60,5 +54,3 @@ $(OBJS) : %.o : %.cpp
 
 clean:
 	rm -f *.o *.d $(APP_NAME)$(EXESUFFIX)
-
--include $(DEPS)
