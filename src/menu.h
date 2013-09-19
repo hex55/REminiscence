@@ -19,6 +19,9 @@
 #define MENU_H__
 
 #include "intern.h"
+#ifdef GCW0
+#include "config.h"
+#endif
 
 struct ModPlayer;
 struct Resource;
@@ -53,14 +56,20 @@ struct Menu {
 	SystemStub *_stub;
 	Video *_vid;
 
+#ifdef GCW0
+    Config *_config;
+#endif
 	const char **_textOptions;
 	uint8 _charVar1;
 	uint8 _charVar2;
 	uint8 _charVar3;
 	uint8 _charVar4;
 	uint8 _charVar5;
-
+#ifdef GCW0
+    Menu(ModPlayer *ply, Resource *res, SystemStub *stub, Video *vid, Config *config);
+#else
 	Menu(ModPlayer *ply, Resource *res, SystemStub *stub, Video *vid);
+#endif
 
 	void drawString(const char *str, int16 y, int16 x, uint8 color);
 	void drawString2(const char *str, int16 y, int16 x);
