@@ -32,7 +32,7 @@ Game::Game(SystemStub *stub, FileSystem *fs, const char *savePath, int level, Re
 	_inp_demo = 0;
 	_inp_record = false;
 	_inp_replay = false;
-	_skillLevel = 1;
+	_skillLevel = SKILL_NORMAL;
 	_currentLevel = level;
 }
 #else
@@ -44,7 +44,7 @@ Game::Game(SystemStub *stub, FileSystem *fs, const char *savePath, int level, Re
 	_inp_demo = 0;
 	_inp_record = false;
 	_inp_replay = false;
-	_skillLevel = 1;
+	_skillLevel = SKILL_NORMAL;
 	_currentLevel = level;
 }
 #endif
@@ -53,7 +53,12 @@ void Game::run() {
 #ifdef GCW0
     _config.Load("config",_savePath);
 #endif
+
+#ifdef NEW_GCW0_MAPPING
+	_stub->init("REminiscence", Video::GAMESCREEN_W, Video::GAMESCREEN_H, &_config);
+#else
 	_stub->init("REminiscence", Video::GAMESCREEN_W, Video::GAMESCREEN_H);
+#endif
 
 	_randSeed = time(0);
 
@@ -191,20 +196,8 @@ void Game::mainLoop() {
 		}
 		if (oldLevel != _currentLevel) {
 #ifdef GCW0
-            DifficultySetting difficulty;
-            switch(_skillLevel){
-            case 0:
-                difficulty = SKILL_EASY;
-                break;
-            case 1:
-                difficulty = SKILL_NORMAL;
-                break;
-            case 2:
-                difficulty = SKILL_HARD;
-                break;
-            }
-            if(_currentLevel>_config.GetLevelAllowed(difficulty)){
-                _config.SetLevelAllowed(difficulty,_currentLevel);
+            if(_currentLevel>_config.GetLevelAllowed(_skillLevel)){
+                _config.SetLevelAllowed(_skillLevel,_currentLevel);
             }
 #endif
 			changeLevel();
@@ -1709,7 +1702,7 @@ void Game::saveState(File *f) {
 void Game::loadState(File *f) {
 	uint16 i;
 	uint32 off;
-	_skillLevel = f->readByte();
+	_skillLevel = (DifficultySetting)f->readByte();
 	_score = f->readUint32BE();
 	memset(_pge_liveTable2, 0, sizeof(_pge_liveTable2));
 	memset(_pge_liveTable1, 0, sizeof(_pge_liveTable1));

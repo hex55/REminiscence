@@ -108,34 +108,114 @@ void Menu::loadPicture(const char *prefix) {
 	_stub->setPalette(_res->_memBuf, 256);
 }
 
+#ifdef NEW_GCW0_MAPPING
+void Menu::LoadInfoScreen(ControlType controlType){
+	_vid->fadeOut();
+	switch (_res->_lang) {
+	case LANG_FR:
+        switch(controlType){
+        case CONTROL_A:
+            for(int i = 0; i < 57344; ++i){
+                _vid->_frontLayer[i] = _instr_f_map[i];
+            }
+            _stub->setPalette(_instr_f_pal, 256);
+            drawString(Game::_version, 1, 1, 6);
+            drawString("< type A >", 26, 1, 6);
+            break;
+        case CONTROL_B:
+            for(int i = 0; i < 57344; ++i){
+                _vid->_frontLayer[i] = _instr_f_b_map[i];
+            }
+            _stub->setPalette(_instr_f_b_pal, 256);
+            drawString(Game::_version, 1, 1, 6);
+            drawString("< type B >", 26, 1, 6);
+            break;
+        }
+        break;
+	case LANG_EN:
+	case LANG_DE:
+	case LANG_SP:
+        switch(controlType){
+        case CONTROL_A:
+            for(int i = 0; i < 57344; ++i){
+                _vid->_frontLayer[i] = _instr_e_map[i];
+            }
+            _stub->setPalette(_instr_e_pal, 256);
+            drawString(Game::_version, 1, 1, 6);
+            drawString("< type A >", 26, 1, 6);
+            break;
+        case CONTROL_B:
+            for(int i = 0; i < 57344; ++i){
+                _vid->_frontLayer[i] = _instr_e_b_map[i];
+            }
+            _stub->setPalette(_instr_e_b_pal, 256);
+            drawString(Game::_version, 1, 1, 6);
+            drawString("< type B >", 26, 1, 6);
+            break;
+        }
+		break;
+	}
+	_vid->fullRefresh();
+	_vid->updateScreen();
+}
+#endif
+
 void Menu::handleInfoScreen() {
+#ifdef NEW_GCW0_MAPPING
+	debug(DBG_MENU, "Menu::handleInfoScreen()");
+	//_vid->fadeOut();
+
+	ControlType controlType = _config->GetControlType();
+
+	LoadInfoScreen(controlType);
+
+	do {
+		_stub->sleep(EVENTS_DELAY);
+		_stub->processEvents();
+		if (_stub->_pi.enter) {
+			_stub->_pi.enter = false;
+			break;
+		}
+
+		if (_stub->_pi.dirMask & PlayerInput::DIR_LEFT) {
+			_stub->_pi.dirMask &= ~PlayerInput::DIR_LEFT;
+			switch(controlType){
+            case CONTROL_A:
+			    controlType = CONTROL_B;
+			    break;
+            case CONTROL_B:
+			    controlType = CONTROL_A;
+			    break;
+			}
+			_config->SetControlType(controlType);
+			LoadInfoScreen(controlType);
+		}
+		if (_stub->_pi.dirMask & PlayerInput::DIR_RIGHT) {
+			_stub->_pi.dirMask &= ~PlayerInput::DIR_RIGHT;
+			switch(controlType){
+            case CONTROL_A:
+			    controlType = CONTROL_B;
+			    break;
+            case CONTROL_B:
+			    controlType = CONTROL_A;
+			    break;
+			}
+			_config->SetControlType(controlType);
+			LoadInfoScreen(controlType);
+		}
+    } while (!_stub->_pi.quit);
+#else
 	debug(DBG_MENU, "Menu::handleInfoScreen()");
 	_vid->fadeOut();
 	//todo: replace me with a GCW0 specific mapping image
 	switch (_res->_lang) {
 	case LANG_FR:
-#ifdef NEW_GCW0_MAPPING
-        for(int i = 0; i < 57344; ++i){
-            _vid->_frontLayer[i] = _instr_f_map[i];
-        }
-        _stub->setPalette(_instr_f_pal, 256);
-        drawString(Game::_version, 26, 1, 6);
-#else
 		loadPicture("instru_f");
-#endif
 		break;
 	case LANG_EN:
 	case LANG_DE:
 	case LANG_SP:
-#ifdef NEW_GCW0_MAPPING
-        for(int i = 0; i < 57344; ++i){
-            _vid->_frontLayer[i] = _instr_e_map[i];
-        }
-        _stub->setPalette(_instr_e_pal, 256);
-        drawString(Game::_version, 26, 1, 6);
-#else
 		loadPicture("instru_e");
-#endif
 		break;
 	}
 	_vid->fullRefresh();
@@ -148,16 +228,17 @@ void Menu::handleInfoScreen() {
 			break;
 		}
 	} while (!_stub->_pi.quit);
+#endif
 }
 
-void Menu::handleSkillScreen(uint8 &new_skill) {
+void Menu::handleSkillScreen(DifficultySetting &new_skill) {
 	debug(DBG_MENU, "Menu::handleSkillScreen()");
 	static const uint8 option_colors[3][3] = { { 2, 3, 3 }, { 3, 2, 3}, { 3, 3, 2 } };
 	_vid->fadeOut();
 	loadPicture("menu3");
 	_vid->fullRefresh();
 	drawString(_res->getMenuString(LocaleData::LI_12_SKILL_LEVEL), 12, 4, 3);
-	int skill_level = new_skill;
+	DifficultySetting skill_level = new_skill;
 	do {
 		drawString(_res->getMenuString(LocaleData::LI_13_EASY), 15, 14, option_colors[skill_level][0]);
 		drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 17, 14, option_colors[skill_level][1]);
@@ -169,18 +250,18 @@ void Menu::handleSkillScreen(uint8 &new_skill) {
 
 		if (_stub->_pi.dirMask & PlayerInput::DIR_UP) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_UP;
-			if (skill_level != 0) {
-				--skill_level;
+			if (skill_level != SKILL_EASY) {
+				skill_level = (DifficultySetting)(skill_level - 1);
 			} else {
-				skill_level = 2;
+				skill_level = SKILL_HARD;
 			}
 		}
 		if (_stub->_pi.dirMask & PlayerInput::DIR_DOWN) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_DOWN;
-			if (skill_level != 2) {
-				++skill_level;
+			if (skill_level != SKILL_HARD) {
+				skill_level = (DifficultySetting)(skill_level + 1);
 			} else {
-				skill_level = 0;
+				skill_level = SKILL_EASY;
 			}
 		}
 		if (_stub->_pi.enter) {
@@ -189,10 +270,10 @@ void Menu::handleSkillScreen(uint8 &new_skill) {
 			return;
 		}
 	} while (!_stub->_pi.quit);
-	new_skill = 1;
+	new_skill = SKILL_NORMAL;
 }
 
-bool Menu::handlePasswordScreen(uint8 &new_skill, uint8 &new_level) {
+bool Menu::handlePasswordScreen(DifficultySetting &new_skill, uint8 &new_level) {
 	debug(DBG_MENU, "Menu::handlePasswordScreen()");
 	_vid->fadeOut();
 	_vid->_charShadowColor = _charVar1;
@@ -241,7 +322,7 @@ bool Menu::handlePasswordScreen(uint8 &new_skill, uint8 &new_level) {
 				for (int skill = 0; skill < 3; ++skill) {
 					if (strcmp(_passwords[level][skill], password) == 0) {
 						new_level = level;
-						new_skill = skill;
+						new_skill = (DifficultySetting)skill;
 						return true;
 					}
 				}
@@ -252,12 +333,12 @@ bool Menu::handlePasswordScreen(uint8 &new_skill, uint8 &new_level) {
 	return false;
 }
 
-bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
+bool Menu::handleLevelScreen(DifficultySetting &new_skill, uint8 &new_level) {
 	debug(DBG_MENU, "Menu::handleLevelScreen()");
 	_vid->fadeOut();
 	loadPicture("menu2");
 	_vid->fullRefresh();
-	uint8 currentSkill = new_skill;
+	DifficultySetting currentSkill = new_skill;
 	uint8 currentLevel = new_level;
 #ifdef GCW0
     uint8 maxLevelEasy = _config->GetLevelAllowed(SKILL_EASY);
@@ -285,18 +366,18 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 		}
 		_vid->markBlockAsDirty(4 * 8, 7 * 8, 192, 7 * 8);
 
-        drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentLevel>maxLevelEasy)?6:((currentSkill == 0) ? 2 : 3));
-        drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentLevel>maxLevelNormal)?6:((currentSkill == 1) ? 2 : 3));
-        drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentLevel>maxLevelHard)?6:((currentSkill == 2) ? 2 : 3));
+        drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentLevel>maxLevelEasy)?6:((currentSkill == SKILL_EASY) ? 2 : 3));
+        drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentLevel>maxLevelNormal)?6:((currentSkill == SKILL_NORMAL) ? 2 : 3));
+        drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentLevel>maxLevelHard)?6:((currentSkill == SKILL_HARD) ? 2 : 3));
 #else
 		for (int i = 0; i < 7; ++i) {
 			drawString(levelTitles[i], 7 + i * 2, 4, (currentLevel == i) ? 2 : 3);
 		}
 		_vid->markBlockAsDirty(4 * 8, 7 * 8, 192, 7 * 8);
 
-        drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentSkill == 0) ? 2 : 3);
-        drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentSkill == 1) ? 2 : 3);
-        drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentSkill == 2) ? 2 : 3);
+        drawString(_res->getMenuString(LocaleData::LI_13_EASY),   23,  4, (currentSkill == SKILL_EASY) ? 2 : 3);
+        drawString(_res->getMenuString(LocaleData::LI_14_NORMAL), 23, 14, (currentSkill == SKILL_NORMAL) ? 2 : 3);
+        drawString(_res->getMenuString(LocaleData::LI_15_EXPERT), 23, 24, (currentSkill == SKILL_HARD) ? 2 : 3);
 #endif
 		_vid->markBlockAsDirty(4 * 8, 23 * 8, 192, 8);
 
@@ -326,42 +407,42 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 		}
 		if(needSkillFixup){
 			switch(currentSkill){
-            case 0:
+            case SKILL_EASY:
                 if(currentLevel>maxLevelEasy){
                     if(currentLevel>maxLevelNormal){
                         if(currentLevel>maxLevelHard){
-                            currentLevel=0;
+                            currentLevel=SKILL_EASY;
                         }else{
-                            currentSkill = 2;
+                            currentSkill = SKILL_HARD;
                         }
                     }else{
-                        currentSkill = 1;
+                        currentSkill = SKILL_NORMAL;
                     }
                 }
                 break;
-            case 1:
+            case SKILL_NORMAL:
                 if(currentLevel>maxLevelNormal){
                     if(currentLevel>maxLevelEasy){
                         if(currentLevel>maxLevelHard){
-                            currentLevel=0;
+                            currentLevel=SKILL_EASY;
                         }else{
-                            currentSkill = 2;
+                            currentSkill = SKILL_HARD;
                         }
                     }else{
-                        currentSkill = 0;
+                        currentSkill = SKILL_EASY;
                     }
                 }
                 break;
-            case 2:
+            case SKILL_HARD:
                 if(currentLevel>maxLevelHard){
                     if(currentLevel>maxLevelEasy){
                         if(currentLevel>maxLevelNormal){
-                            currentLevel=0;
+                            currentLevel=SKILL_EASY;
                         }else{
-                            currentSkill = 1;
+                            currentSkill = SKILL_NORMAL;
                         }
                     }else{
-                        currentSkill = 0;
+                        currentSkill = SKILL_EASY;
                     }
                 }
                 break;
@@ -370,25 +451,25 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 		if (_stub->_pi.dirMask & PlayerInput::DIR_LEFT) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_LEFT;
 			switch(currentSkill){
-            case 0:
+            case SKILL_EASY:
                 if(currentLevel <= maxLevelHard){
-                    currentSkill = 2;
+                    currentSkill = SKILL_HARD;
                 }else if(currentLevel <= maxLevelNormal){
-                    currentSkill = 1;
+                    currentSkill = SKILL_NORMAL;
                 }
 			    break;
-            case 1:
+            case SKILL_NORMAL:
                 if(currentLevel <= maxLevelEasy){
-                    currentSkill = 0;
+                    currentSkill = SKILL_EASY;
                 }else if(currentLevel <= maxLevelHard){
-                    currentSkill = 2;
+                    currentSkill = SKILL_HARD;
                 }
 			    break;
-            case 2:
+            case SKILL_HARD:
                 if(currentLevel <= maxLevelNormal){
-                    currentSkill = 1;
+                    currentSkill = SKILL_NORMAL;
                 }else if(currentLevel <= maxLevelEasy){
-                    currentSkill = 0;
+                    currentSkill = SKILL_EASY;
                 }
 			    break;
 			}
@@ -396,25 +477,25 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 		if (_stub->_pi.dirMask & PlayerInput::DIR_RIGHT) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_RIGHT;
 			switch(currentSkill){
-			case 0:
+			case SKILL_EASY:
     			if(currentLevel <= maxLevelNormal){
-        			currentSkill = 1;
+        			currentSkill = SKILL_NORMAL;
                 }else if(currentLevel <= maxLevelHard){
-                    currentSkill = 2;
+                    currentSkill = SKILL_HARD;
                 }
 			    break;
-            case 1:
+            case SKILL_NORMAL:
                 if(currentLevel <= maxLevelHard){
-                    currentSkill = 2;
+                    currentSkill = SKILL_HARD;
                 }else if(currentLevel <= maxLevelEasy){
-                    currentSkill = 0;
+                    currentSkill = SKILL_EASY;
                 }
 			    break;
-            case 2:
+            case SKILL_HARD:
                 if(currentLevel <= maxLevelEasy){
-                    currentSkill = 0;
+                    currentSkill = SKILL_EASY;
                 }else if(currentLevel <= maxLevelNormal){
-                    currentSkill = 1;
+                    currentSkill = SKILL_NORMAL;
                 }
 			    break;
 			}
@@ -438,18 +519,18 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 		}
 		if (_stub->_pi.dirMask & PlayerInput::DIR_LEFT) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_LEFT;
-			if (currentSkill != 0) {
-				--currentSkill;
+			if (currentSkill != SKILL_EASY) {
+				currentSkill = (DifficultySetting)(currentSkill-1);
 			} else {
-				currentSkill = 2;
+				currentSkill = SKILL_HARD;
 			}
 		}
 		if (_stub->_pi.dirMask & PlayerInput::DIR_RIGHT) {
 			_stub->_pi.dirMask &= ~PlayerInput::DIR_RIGHT;
-			if (currentSkill != 2) {
-				++currentSkill;
+			if (currentSkill != SKILL_HARD) {
+				currentSkill = (DifficultySetting)(currentSkill+1);
 			} else {
-				currentSkill = 0;
+				currentSkill = SKILL_EASY;
 			}
 		}
 #endif
@@ -468,7 +549,7 @@ bool Menu::handleLevelScreen(uint8 &new_skill, uint8 &new_level) {
 	return false;
 }
 
-bool Menu::handleTitleScreen(uint8 &new_skill, uint8 &new_level) {
+bool Menu::handleTitleScreen(DifficultySetting &new_skill, uint8 &new_level) {
 	debug(DBG_MENU, "Menu::handleTitleScreen()");
 	bool quit_loop = false;
 	int menu_entry = 0;

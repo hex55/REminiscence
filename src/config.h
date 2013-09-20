@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "file.h"
 #ifndef CONFIG_H_INCLUDED
 #define CONFIG_H_INCLUDED
+#include "file.h"
+#include "intern.h"
+
 enum ControlType { CONTROL_A, CONTROL_B };
-enum DifficultySetting { SKILL_EASY, SKILL_NORMAL, SKILL_HARD };
 
 class Config{
     int levelAllowanceEasy;
@@ -36,7 +37,7 @@ class Config{
     uint32 EncodeLevelAllowance();
 public:
     Config();
-    void Load(char* fileName, const char* filePath);
+    void Load(const char* fileName, const char* filePath);
     void Save();
     ControlType GetControlType();
     void SetControlType(ControlType type);

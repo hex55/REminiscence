@@ -80,7 +80,7 @@ void Game::pge_loadForCurrentLevel(uint16 idx) {
 	live_pge->room_location = init_pge->init_room;
 
 	live_pge->life = init_pge->life;
-	if (_skillLevel >= 2 && init_pge->object_type == 10) {
+	if (_skillLevel >= SKILL_HARD && init_pge->object_type == 10) {
 		live_pge->life *= 2;
 	}
 	live_pge->counter_value = 0;

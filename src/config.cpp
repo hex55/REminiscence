@@ -28,7 +28,7 @@ Config::Config()
     this->actual = false;
 }
 
-void Config::Load(char* fileName, const char* filePath){
+void Config::Load(const char* fileName, const char* filePath){
     this->fileName = (char*)malloc(strlen(fileName));
     strcpy(this->fileName,fileName);
     this->filePath = (char*)malloc(strlen(filePath));

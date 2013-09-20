@@ -19,6 +19,9 @@
 #define SYSTEMSTUB_H__
 
 #include "intern.h"
+#ifdef NEW_GCW0_MAPPING
+#include "config.h"
+#endif
 
 struct PlayerInput {
 	enum {
@@ -62,7 +65,11 @@ struct SystemStub {
 
 	virtual ~SystemStub() {}
 
+#ifdef NEW_GCW0_MAPPING
+	virtual void init(const char *title, int w, int h, Config* config) = 0;
+#else
 	virtual void init(const char *title, int w, int h) = 0;
+#endif
 	virtual void destroy() = 0;
 
 	virtual void setPalette(const uint8 *pal, int n) = 0;

@@ -45,10 +45,16 @@ struct Menu {
 	static const char *_passwords[8][3];
 
 #ifdef NEW_GCW0_MAPPING
+    //mapping A
 	static const uint8 _instr_f_map[];
 	static const uint8 _instr_f_pal[];
 	static const uint8 _instr_e_map[];
 	static const uint8 _instr_e_pal[];
+    //mapping B
+	static const uint8 _instr_f_b_map[];
+	static const uint8 _instr_f_b_pal[];
+	static const uint8 _instr_e_b_map[];
+	static const uint8 _instr_e_b_pal[];
 #endif
 
 	ModPlayer *_ply;
@@ -67,6 +73,7 @@ struct Menu {
 	uint8 _charVar5;
 #ifdef GCW0
     Menu(ModPlayer *ply, Resource *res, SystemStub *stub, Video *vid, Config *config);
+    void LoadInfoScreen(ControlType controlType);
 #else
 	Menu(ModPlayer *ply, Resource *res, SystemStub *stub, Video *vid);
 #endif
@@ -75,10 +82,10 @@ struct Menu {
 	void drawString2(const char *str, int16 y, int16 x);
 	void loadPicture(const char *prefix);
 	void handleInfoScreen();
-	void handleSkillScreen(uint8 &new_skill);
-	bool handlePasswordScreen(uint8 &new_skill, uint8 &new_level);
-	bool handleLevelScreen(uint8 &new_skill, uint8 &new_level);
-	bool handleTitleScreen(uint8 &new_skill, uint8 &new_level);
+	void handleSkillScreen(DifficultySetting &new_skill);
+	bool handlePasswordScreen(DifficultySetting &new_skill, uint8 &new_level);
+	bool handleLevelScreen(DifficultySetting &new_skill, uint8 &new_level);
+	bool handleTitleScreen(DifficultySetting &new_skill, uint8 &new_level);
 };
 
 #endif // MENU_H__

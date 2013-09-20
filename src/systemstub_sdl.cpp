@@ -42,7 +42,14 @@ struct SystemStub_SDL : SystemStub {
 	bool _fadeOnUpdateScreen;
 
 	virtual ~SystemStub_SDL() {}
+
+#ifdef NEW_GCW0_MAPPING
+	virtual void init(const char *title, int w, int h, Config* config);
+	Config* _config;
+#else
 	virtual void init(const char *title, int w, int h);
+#endif
+
 	virtual void destroy();
 	virtual void setPalette(const uint8 *pal, int n);
 	virtual void setPaletteEntry(int i, const Color *c);
@@ -72,7 +79,12 @@ SystemStub *SystemStub_SDL_create() {
 	return new SystemStub_SDL();
 }
 
+#ifdef NEW_GCW0_MAPPING
+void SystemStub_SDL::init(const char *title, int w, int h, Config* config) {
+	_config = config;
+#else
 void SystemStub_SDL::init(const char *title, int w, int h) {
+#endif
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 	SDL_ShowCursor(SDL_DISABLE);
 	SDL_WM_SetCaption(title, NULL);
@@ -384,14 +396,41 @@ while (true) {
 			case SDLK_DOWN:
 				_pi.dirMask &= ~PlayerInput::DIR_DOWN;
 				break;
-			case SDLK_LSHIFT: //take out weapon
-				_pi.space = false;
+			case SDLK_LSHIFT:
+                switch(_config->GetControlType()){
+                case CONTROL_A:
+                    //A draw gun
+                    _pi.space = false;
+                    break;
+                case CONTROL_B:
+                    //B action/run/take
+                    _pi.shift = false;
+                    break;
+                }
 				break;
-			case SDLK_LALT: //action/run/take
-				_pi.shift = false;
+			case SDLK_LALT:
+                switch(_config->GetControlType()){
+                case CONTROL_A:
+                    //A action/run/take
+                    _pi.shift = false;
+                    break;
+                case CONTROL_B:
+                    //B use item
+                    _pi.enter = false;
+                    break;
+                }
 				break;
-			case SDLK_LCTRL: //use object
-				_pi.enter = false;
+			case SDLK_LCTRL:
+                switch(_config->GetControlType()){
+                case CONTROL_A:
+                    //A use item
+                    _pi.enter = false;
+                    break;
+                case CONTROL_B:
+                    //B draw gun
+                    _pi.space = false;
+                    break;
+                }
 				break;
 			case SDLK_RETURN: //options
 				_pi.escape = false;
@@ -450,14 +489,41 @@ while (true) {
 			case SDLK_SPACE: //inventory/end movies
 				_pi.backspace = true;
 				break;
-			case SDLK_LSHIFT: //take weapon out
-				_pi.space = true;
+			case SDLK_LSHIFT:
+                switch(_config->GetControlType()){
+                case CONTROL_A:
+                    //A draw gun
+                    _pi.space = true;
+                    break;
+                case CONTROL_B:
+                    //B action/run/take
+                    _pi.shift = true;
+                    break;
+                }
 				break;
-			case SDLK_LALT: //action/run/take
-				_pi.shift = true;
+			case SDLK_LALT:
+                switch(_config->GetControlType()){
+                case CONTROL_A:
+                    //A action/run/take
+                    _pi.shift = true;
+                    break;
+                case CONTROL_B:
+                    //B use item
+                    _pi.enter = true;
+                    break;
+                }
 				break;
-			case SDLK_LCTRL: //use object
-				_pi.enter = true;
+			case SDLK_LCTRL:
+                switch(_config->GetControlType()){
+                case CONTROL_A:
+                    //A use item
+                    _pi.enter = true;
+                    break;
+                case CONTROL_B:
+                    //B draw gun
+                    _pi.space = true;
+                    break;
+                }
 				break;
 			case SDLK_RETURN: //options
 				_pi.escape = true;

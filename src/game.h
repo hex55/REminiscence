@@ -19,7 +19,6 @@
 #define GAME_H__
 
 #ifdef GCW0
-#define NEW_GCW0_MAPPING
 #include "config.h"
 #endif
 
@@ -87,7 +86,7 @@ struct Game {
 	const uint8 *_stringsTable;
 	const char **_textsTable;
 	uint8 _currentLevel;
-	uint8 _skillLevel;
+	DifficultySetting _skillLevel;
 	uint32 _score;
 	uint8 _currentRoom;
 	uint8 _currentIcon;

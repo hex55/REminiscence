@@ -46,6 +46,12 @@ enum Language {
 	LANG_SP
 };
 
+enum DifficultySetting {
+    SKILL_EASY = 0,
+    SKILL_NORMAL = 1,
+    SKILL_HARD = 2
+};
+
 enum ResourceType {
 	kResourceTypeAmiga,
 	kResourceTypePC
