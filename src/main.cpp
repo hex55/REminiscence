@@ -19,6 +19,7 @@
 #include "fs.h"
 #include "game.h"
 #include "systemstub.h"
+#include "gcw0staticres.h"
 #include <sys/stat.h>
 
 static const char *USAGE =
@@ -104,7 +105,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 #ifdef GCW0
-    debug(DBG_INFO,"Sfotware version: %s",Game::_version);
+    debug(DBG_INFO,"Software version: %s",Game::_version);
 	if(argc<=1){
 	    debug(DBG_INFO, "No arguments given");
         char basepath[256];
@@ -125,14 +126,33 @@ int main(int argc, char *argv[]) {
 #endif
 	g_debugMask = DBG_INFO; // DBG_CUT | DBG_VIDEO | DBG_RES | DBG_MENU | DBG_PGE | DBG_GAME | DBG_UNPACK | DBG_COL | DBG_MOD | DBG_SFX | DBG_FILE;
 	FileSystem fs(dataPath);
+
+    SystemStub *stub = SystemStub_SDL_create();
+
 	const int version = detectVersion(&fs);
 	if (version == -1) {
+#ifdef GCW0
+	    //display an instruction screen
+		stub->init("help", Video::GAMESCREEN_W, Video::GAMESCREEN_H,new Config());
+		stub->setPalette(_instr_data_pal,256);
+		stub->copyRect(0, 0,  Video::GAMESCREEN_W, Video::GAMESCREEN_H, _instr_data_map, 256);
+		stub->updateScreen(0);
+        while (!stub->_pi.quit) {
+            stub->processEvents();
+            if (stub->_pi.enter) {
+                stub->_pi.enter = false;
+                break;
+            }
+            stub->sleep(100);
+        }
+		delete stub;
+#endif
 		error("Unable to find data files, check that all required files are present");
 		return -1;
 	}
+
 	Language language = detectLanguage(&fs);
 
-    SystemStub *stub = SystemStub_SDL_create();
 	Game *g = new Game(stub, &fs, savePath, atoi(levelNum), (ResourceType)version, language);
 	g->run();
 	delete g;

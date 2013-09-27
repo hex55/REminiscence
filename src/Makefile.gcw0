@@ -19,7 +19,7 @@ F_OPTS = -falign-functions -falign-loops -falign-labels -falign-jumps \
 	-fomit-frame-pointer -fno-builtin -fno-common \
 	-fstrict-aliasing  -fexpensive-optimizations \
 	-finline -finline-functions -fpeel-loops -fno-exceptions -fno-rtti -fpermissive
-CC_OPTS		= -O2 -mips32 -mhard-float -G0 $(DEFINES) $(F_OPTS)
+CC_OPTS		= -mips32 -mhard-float -O2 -G0 $(DEFINES) $(F_OPTS)
 
 CFLAGS		= -I$(SDL_CFLAGS) $(CC_OPTS)
 CXXFLAGS	= $(CFLAGS)
