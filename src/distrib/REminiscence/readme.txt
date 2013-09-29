@@ -1,8 +1,8 @@
-+---------------------------------------------------------------------------------------+
-|                                                                                       |
-|                              REminiscence port for GCW0:                              |
-|                                                                                       |
-+---------------------------------------------------------------------------------------+
++-------------------------------------------------------------------------------------+
+|                                                                                     |
+|                            REminiscence port for GCW0:                              |
+|                                                                                     |
++-------------------------------------------------------------------------------------+
 
 About:
 ------
@@ -14,10 +14,25 @@ just a simple recompile with a few settings altered.
 
 The SourceCode is avaible in "https://github.com/ElwingGit/GCW0_REminiscence.git".
 
-Usage:
+Game data:
+----------
+
+Flashback is not a free game, to be able to play it with this new engine you need
+the game data. This port should support all the file format supported by Cyx's
+REminiscence.
+
+* Required data:
+The PC game data, both the DOS and the CD-ROM version are supported (in my opinion
+vector graphics looks better than the video of the CD-ROM version...).
+
+*optional datas:
+The Amiga mod files can be added to get music during the cinematics.
+The SegaCD speech file (voice.vce) for in game speech.
+
+Installation:
 ------
 
-The OPK packaged version by default will create a folder for the data and the savefile
+REminiscence by default will create a folder for the data and the savefile
 if it did not exist before. Thus you can either:
 - copy the opk on the GCW0
 - run the opk once.
@@ -28,16 +43,39 @@ or:
 - create the folder and copy the datafile in "/usr/local/home/.REminiscence/data"
 - start the opk again and enjoy the game.
 
+Key Mapping:
+------------
+This port offer two different key mappings, here the default key mapping (typeA):
+    Arrow Keys      move Conrad
+    A               use the current inventory object
+    B               talk / use / run / shoot
+    X               draw gun
+    Y               display the inventory
+    Start           display the options
+
+and here is the second mapping (typeB):
+    Arrow Keys      move Conrad
+    A               draw gun
+    B               use the current inventory object
+    X               talk / use / run / shoot
+    Y               display the inventory
+    Start           display the options
+
+you can change the mapping used from the game main menu, in the "info" submenu.
+
 Credits:
 --------
-Gregory Montoir of course and all the people who helped him with the original REminiscence
+- Gregory Montoir of course and all the people who helped him with the original REminiscence.
+- Hi-Ban who provided some great icon to replace the copyright infringing icon I had before.
+- all GCW0 team for their nice toolchain, their testing done, the GCW0 itself and the nice
+  repo.
 
 
-+---------------------------------------------------------------------------------------+
-|                                                                                       |
-|                             Original REminiscence ReadMe:                             |
-|                                                                                       |
-+---------------------------------------------------------------------------------------+
++-------------------------------------------------------------------------------------+
+|                                                                                     |
+|                           Original REminiscence ReadMe:                             |
+|                                                                                     |
++-------------------------------------------------------------------------------------+
 
 
 REminiscence README
