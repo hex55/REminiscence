@@ -49,6 +49,7 @@ ipk: $(target).dge
 	@echo title=$(title) > /tmp/.$(target)-ipk/root/home/retrofw/apps/gmenu2x/sections/$(section)/$(target).lnk
 	@echo description=$(description) >> /tmp/.$(target)-ipk/root/home/retrofw/apps/gmenu2x/sections/$(section)/$(target).lnk
 	@echo exec=/home/retrofw/$(section)/$(target)/$(target).dge >> /tmp/.$(target)-ipk/root/home/retrofw/apps/gmenu2x/sections/$(section)/$(target).lnk
+	@echo params=--datapath=data >> /tmp/.$(target)-ipk/root/home/retrofw/apps/gmenu2x/sections/$(section)/$(target).lnk
 	@echo clock=600 >> /tmp/.$(target)-ipk/root/home/retrofw/apps/gmenu2x/sections/$(section)/$(target).lnk
 	@sed -e "s/^Version:.*/Version: $$(date +%Y%m%d)/" -e "s/^Section:.*/Section: $(section)/" distrib/control > /tmp/.$(target)-ipk/control
 	@echo /home/retrofw/apps/gmenu2x/sections/$(section)/$(target).lnk > /tmp/.$(target)-ipk/conffiles
