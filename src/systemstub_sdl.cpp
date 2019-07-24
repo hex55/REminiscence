@@ -20,6 +20,29 @@
 #include "scaler.h"
 #include "systemstub.h"
 
+SDL_Surface *ScreenSurface;
+
+void quick_flip(SDL_Surface *src)
+{
+#if 0
+	if(SDL_MUSTLOCK(ScreenSurface)) SDL_LockSurface(ScreenSurface);
+	int x, y;
+	uint32_t *s = (uint32_t*)src->pixels;
+	uint32_t *d = (uint32_t*)ScreenSurface->pixels;
+	for(y=0; y<240; y++){
+		for(x=0; x<160; x++){
+			*d++ = *s++;
+		}
+		d+= 160;
+	}
+	if(SDL_MUSTLOCK(ScreenSurface)) SDL_UnlockSurface(ScreenSurface);
+#else
+	SDL_Surface *p = SDL_ConvertSurface(src, ScreenSurface->format, 0);
+	SDL_SoftStretch(p, NULL, ScreenSurface, NULL);
+	SDL_FreeSurface(p);
+#endif
+	SDL_Flip(ScreenSurface);
+}
 
 struct SystemStub_SDL : SystemStub {
 	enum {
@@ -241,7 +264,8 @@ void SystemStub_SDL::updateScreen(int shakeOffset) {
 			const uint16 *src = tempScreenBuffer + _screenW + 1;
 			(*_scalers[_currentScaler].proc)(dst, _screenSurface->pitch, src, _screenW, _screenW, _screenH);
 			SDL_UnlockSurface(_screenSurface);
-			SDL_UpdateRect(_screenSurface, 0, 0, _screenW * mul, _screenH * mul);
+			//SDL_UpdateRect(_screenSurface, 0, 0, _screenW * mul, _screenH * mul);
+			quick_flip(_screenSurface);
 			SDL_Delay(30);
 		}
 		free(tempScreenBuffer);
@@ -263,7 +287,8 @@ void SystemStub_SDL::updateScreen(int shakeOffset) {
 			br->w *= mul;
 			br->h *= mul;
 		}
-		SDL_UpdateRects(_screenSurface, _numBlitRects, _blitRects);
+		//SDL_UpdateRects(_screenSurface, _numBlitRects, _blitRects);
+		quick_flip(_screenSurface);
 	} else {
 		SDL_LockSurface(_screenSurface);
 		int w = _screenW;
@@ -280,7 +305,8 @@ void SystemStub_SDL::updateScreen(int shakeOffset) {
 		r.h = shakeOffset * mul;
 		SDL_FillRect(_screenSurface, &r, _pal[_overscanColor]);
 
-		SDL_UpdateRect(_screenSurface, 0, 0, _screenW * mul, _screenH * mul);
+		//SDL_UpdateRect(_screenSurface, 0, 0, _screenW * mul, _screenH * mul);
+		quick_flip(_screenSurface);
 	}
 	_numBlitRects = 0;
 }
@@ -630,7 +656,7 @@ void SystemStub_SDL::startAudio(AudioCallback callback, void *param) {
 	SDL_AudioSpec desired;
 	memset(&desired, 0, sizeof(desired));
 	desired.freq = SOUND_SAMPLE_RATE;
-	desired.format = AUDIO_S8;
+	desired.format = AUDIO_U8;
 	desired.channels = 1;
 	desired.samples = 2048;
 	desired.callback = callback;
@@ -661,8 +687,11 @@ void SystemStub_SDL::unlockAudio() {
 void SystemStub_SDL::prepareGfxMode() {
 	int w = _screenW * _scalers[_currentScaler].factor;
 	int h = _screenH * _scalers[_currentScaler].factor;
+
 	debug(DBG_INFO, "SDL_SetVideoMode(%d,%d)",w,h);
-	_screenSurface = SDL_SetVideoMode(w, h, 16, _fullscreen ? (SDL_FULLSCREEN | SDL_HWSURFACE) : SDL_HWSURFACE);
+	//_screenSurface = SDL_SetVideoMode(w, h, 16, _fullscreen ? (SDL_FULLSCREEN | SDL_HWSURFACE) : SDL_HWSURFACE);
+	ScreenSurface = SDL_SetVideoMode(320, 480, 16, SDL_HWSURFACE);
+	_screenSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 16, 0, 0, 0, 0);
 	if (!_screenSurface) {
 		error("SystemStub_SDL::prepareGfxMode() Unable to allocate _screen buffer");
 	}

@@ -52,7 +52,8 @@ struct Mixer {
 	typedef bool (*PremixHook)(void *userData, int8 *buf, int len);
 
 	enum {
-		NUM_CHANNELS = 4,
+		//NUM_CHANNELS = 4,
+		NUM_CHANNELS = 1,
 		FRAC_BITS = 12,
 		MAX_VOLUME = 64
 	};
