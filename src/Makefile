@@ -39,7 +39,7 @@ $(target).dge: $(OBJS)
 	$(CXX) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
 
 clean:
-	rm -f *.o *.d
+	rm -f *.o *.d *.ipk *.dge
 
 -include $(DEPS)
 
