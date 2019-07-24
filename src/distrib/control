@@ -1,0 +1,10 @@
+Package: REminiscence
+Version: 
+Description: REminiscence port
+Section: games
+Priority: optional
+Maintainer: scooterpsu
+Architecture: mipsel
+Homepage: https://github.com/scooterpsu/REminiscence
+Depends:
+Source: https://github.com/scooterpsu/REminiscence
