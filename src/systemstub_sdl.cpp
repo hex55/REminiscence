@@ -47,7 +47,7 @@ void quick_flip(SDL_Surface *src)
 struct SystemStub_SDL : SystemStub {
 	enum {
 		MAX_BLIT_RECTS = 200,
-		SOUND_SAMPLE_RATE = 22050,
+		SOUND_SAMPLE_RATE = 11025,
 		JOYSTICK_COMMIT_VALUE = 3200
 	};
 
@@ -655,7 +655,7 @@ void SystemStub_SDL::startAudio(AudioCallback callback, void *param) {
 	SDL_AudioSpec desired;
 	memset(&desired, 0, sizeof(desired));
 	desired.freq = SOUND_SAMPLE_RATE;
-	desired.format = AUDIO_U8;
+	desired.format = AUDIO_S16SYS;
 	desired.channels = 1;
 	desired.samples = 2048;
 	desired.callback = callback;
