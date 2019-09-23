@@ -488,7 +488,7 @@ while (true) {
 			case SDLK_RETURN:
 				_pi.enter = false;
 				break;
-			case SDLK_ESCAPE:
+			case SDLK_RCTRL:
 				_pi.escape = false;
 				break;
 			default:
@@ -611,8 +611,7 @@ while (true) {
 			case SDLK_DOWN:
 				_pi.dirMask |= PlayerInput::DIR_DOWN;
 				break;
-			case SDLK_BACKSPACE:
-			case SDLK_TAB:
+			case SDLK_ESCAPE:
 				_pi.backspace = true;
 				break;
 			case SDLK_SPACE:
@@ -625,7 +624,7 @@ while (true) {
 			case SDLK_RETURN:
 				_pi.enter = true;
 				break;
-			case SDLK_ESCAPE:
+			case SDLK_RCTRL:
 				_pi.escape = true;
 				break;
 			default:
