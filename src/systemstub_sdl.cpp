@@ -690,7 +690,7 @@ void SystemStub_SDL::prepareGfxMode() {
 
 	debug(DBG_INFO, "SDL_SetVideoMode(%d,%d)",w,h);
 	//_screenSurface = SDL_SetVideoMode(w, h, 16, _fullscreen ? (SDL_FULLSCREEN | SDL_HWSURFACE) : SDL_HWSURFACE);
-	ScreenSurface = SDL_SetVideoMode(320, 480, 16, SDL_HWSURFACE);
+	ScreenSurface = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE);
 	_screenSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 16, 0, 0, 0, 0);
 	if (!_screenSurface) {
 		error("SystemStub_SDL::prepareGfxMode() Unable to allocate _screen buffer");
